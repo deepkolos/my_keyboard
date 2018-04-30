@@ -78,11 +78,16 @@ public:
       }
     }
 
-    if (curr == head) {
+    if (curr->data == data) {
+      if (curr == head)
+        head = curr->next;
+      else 
+        before->next = curr->next;
+        
       delete curr;
-      head = nullptr;
       return true;
     }
+    
     return false;
   }
 
