@@ -5,8 +5,8 @@ int composite_key_len;
 
 #include "cps_key.h"
 
-#define KC_0_TO_9_SET_LEN 12
-#define KC_0_TO_9_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_CAPS, KC_LSFT}
+#define KC_0_TO_9_SET_LEN 16
+#define KC_0_TO_9_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_CAPS, KC_LSFT, KC_W, KC_A, KC_S, KC_D}
 #define KC_WASD_KEY_LEN 7
 #define KC_WASD_KEY {KC_LSFT, KC_CAPS, KC_W, KC_A, KC_S, KC_D, KC_R}
 
@@ -36,13 +36,13 @@ composite_key_t composite_keymap[] = {
      // shift + bs -> enter
      {{KC_CAPS, KC_TAB},    2,
      {KC_ENT},              1,
-     {},                    0,
+     {KC_CAPS},             1,
      DEFAULT_CPS_BASE},
      
      // home + r -> win + r
      {{KC_HOME, KC_R},      2,
      {KC_LGUI, KC_R},       2,
-     {KC_CAPS, KC_LSFT},    2,
+     KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
 
      // win + n start
@@ -95,13 +95,13 @@ composite_key_t composite_keymap[] = {
      // home + esc -> alt + f4
      {{KC_HOME, KC_ESC},    2,
      {KC_LALT, KC_F4},      2,
-     {KC_CAPS, KC_LSFT},    2,
+     KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
     
      // home + tab -> alt + tab
      {{KC_HOME, KC_LCTL},   2,
      {KC_LALT, KC_LCTL},    2,
-     {KC_CAPS, KC_LSFT},    2,
+     KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
 
      // esc + n -> fn start

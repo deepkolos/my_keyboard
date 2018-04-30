@@ -12,7 +12,7 @@ typedef struct
   const uint8_t scan_key_len;
   const uint8_t trigger_keys[5];
   const uint8_t trigger_key_len;
-  const uint8_t key_allow_insert[12];
+  const uint8_t key_allow_insert[16];
   const uint8_t key_allow_insert_len;
   uint8_t matched;
   uint8_t unmatched;
@@ -42,7 +42,7 @@ bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
   return false;
 }
 
-int index_of(uint8_t list[], uint8_t len, uint8_t keycode)
+int index_of(const uint8_t list[], uint8_t len, uint8_t keycode)
 {
   uint8_t i;
   if (len != 0)
@@ -116,9 +116,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         cps_key->unmatched++;
         // 现在组合键处于未触发状态, 则释放被阻塞的按钮, 会重复触发, 不该在这里触发
         if (cps_key->matched < cps_key->scan_key_len && cps_key->matched > 0)
-          for (j = 0; j < cps_key->matched; j++)
+          for (j = 0; j < cps_key->matched; j++) {
             // 把已经match, 那些被阻塞的, 取消阻塞
             recover_key_set.add(cps_key->scan_keys[j]);
+            Serial.print(" add to recover set");
+          }
       }
       Serial.println();
     }
@@ -129,7 +131,7 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
       scan_key_index = index_of(cps_key->scan_keys, cps_key->scan_key_len, keycode);
       if (scan_key_index != -1)
       {
-        if (cps_key->scan_keys[cps_key->matched] != keycode && cps_key->unmatched != 0)
+        if (cps_key->scan_keys[cps_key->matched] != keycode && cps_key->unmatched != 0 && !check_in_allow_insert_key_list(cps_key, keycode))
           cps_key->unmatched--;
 
         if (cps_key->matched != 0)
