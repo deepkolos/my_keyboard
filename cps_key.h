@@ -14,12 +14,14 @@ typedef struct
   const uint8_t trigger_key_len;
   const uint8_t key_allow_insert[16];
   const uint8_t key_allow_insert_len;
+  bool mode;
   uint8_t matched;
   uint8_t unmatched;
   bool has_triggered;
 } composite_key_t;
 
-#define DEFAULT_CPS_BASE .matched = 0,   \
+#define DEFAULT_CPS_BASE .mode = false,      \
+                         .matched = 0,   \
                          .unmatched = 0, \
                          .has_triggered = false
 
@@ -85,7 +87,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         Serial.print("scan key");
         cps_key->matched++;
         // 阻塞该默认
-        if (!(cps_key->matched == 1 && cps_key->unmatched != 0)) {
+        if (cps_key->matched == 1 && cps_key->mode == 1 && cps_key->unmatched == 0) {
+          // 取消阻塞
+        } else
+        if (!(cps_key->matched == 1 && cps_key->unmatched != 0))
+        {
           block = true;
           blocked_press_key_set.add(keycode);
         }
@@ -116,7 +122,8 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         cps_key->unmatched++;
         // 现在组合键处于未触发状态, 则释放被阻塞的按钮, 会重复触发, 不该在这里触发
         if (cps_key->matched < cps_key->scan_key_len && cps_key->matched > 0)
-          for (j = 0; j < cps_key->matched; j++) {
+          for (j = 0; j < cps_key->matched; j++)
+          {
             // 把已经match, 那些被阻塞的, 取消阻塞
             recover_key_set.add(cps_key->scan_keys[j]);
             Serial.print(" add to recover set");
@@ -160,6 +167,8 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             cps_key->has_triggered = false;
             cps_key->unmatched = 0;
             recover_key_set.empty();
+            if (cps_key->mode == 1)
+              block = false;
             Serial.print(" all");
             press_trigger_key_set.foreach (print_key);
           }
@@ -179,7 +188,7 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
         Serial.print("not insert key");
         // 如果减去之后会恢复match的阻塞状态
-        if (cps_key->unmatched == 0 && cps_key->matched != 0)
+        if (cps_key->unmatched == 0 && cps_key->matched != 0 && cps_key->mode != 1)
           for (j = 0; j < cps_key->matched; j++)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               release_key(cps_key->scan_keys[j]);

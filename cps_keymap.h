@@ -37,7 +37,7 @@ composite_key_t composite_keymap[] = {
      {{KC_CAPS, KC_TAB},    2,
      {KC_ENT},              1,
      {KC_CAPS},             1,
-     DEFAULT_CPS_BASE},
+     true, 0, 0, false},
      
      // home + r -> win + r
      {{KC_HOME, KC_R},      2,
