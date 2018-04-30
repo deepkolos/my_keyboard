@@ -19,6 +19,7 @@
         "singlenkrokeyboard.h": "c",
         "stdint.h": "c",
         "keymap.c": "cpp",
-        "keycode.c": "cpp"
+        "keycode.c": "cpp",
+        "keyboard.c": "cpp"
     }
 }

@@ -1,11 +1,11 @@
-#ifndef KEYBOARD_C
-#define KEYBOARD_C
+#ifndef KEYBOARD_HPP
+#define KEYBOARD_HPP
 
-#include "keycode.c"
+#include "keymap.h"
 #include "mHID-Project/HID-Project.h"
 #include "mHID-Project/HID-Settings.h"
 
-void init () {
+void init_keyboard () {
     Consumer.begin();
     NKROKeyboard.begin();
 }
