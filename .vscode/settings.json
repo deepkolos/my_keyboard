@@ -1,0 +1,24 @@
+{
+    "files.associations": {
+        "type.h": "c",
+        "progmem.h": "c",
+        "keymap.h": "c",
+        "keycode.h": "c",
+        "action_code.h": "c",
+        "keyboard.h": "c",
+        "ProMicro-keyboard.ino": "c",
+        "hid-project.h": "c",
+        "gamepad.h": "c",
+        "bootmouse.h": "c",
+        "singleabsolutemouse.h": "c",
+        "hid-settings.h": "c",
+        "arduino.h": "c",
+        "stdlib.h": "c",
+        "config.h": "c",
+        "nkrokeyboard.h": "c",
+        "singlenkrokeyboard.h": "c",
+        "stdint.h": "c",
+        "keymap.c": "cpp",
+        "keycode.c": "cpp"
+    }
+}

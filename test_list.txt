@@ -1,0 +1,37 @@
+#0
+press home      block home
+release home    short recover
+
+#1
+press home      block home
+press a         block a, trigger cps key -> press left
+release a       block a, 慢释放, release left
+press s         block s, trigger cps key -> press down
+press d         block d, trigger cps key -> press right
+release s       block s, 慢释放, release down
+press f         不会block f
+release f       不会block f
+
+#2
+press shift     block shift
+press a         unblock shift -> press shift press a
+release a       release a, reblock shift -> release shift
+press bs        block bs, trigger cps key -> press enter
+release bs      block bs, 慢释放, release enter
+release shift   block shift
+
+#3
+press home      block home
+press r         block r, trigger cps key -> press win press r
+press d         不会block d
+release d       不会block d
+release r       block r, 慢释放, release r(前面的r是scan_key里, 后面的是trigger_key里的)
+release home    block home, 慢释放, release win
+
+#4
+press home      block home
+press r         block r, trigger cps key -> press win press r
+release r       block r, 慢释放, release r
+press d         block d, trigger cps key -> press right
+release d       block d, 慢释放, release right
+release home    block home, 慢释放, release win

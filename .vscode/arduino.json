@@ -1,0 +1,7 @@
+{
+    "board": "SparkFun:avr:promicro",
+    "configuration": "cpu=16MHzatmega32U4",
+    "sketch": "my_keyboard.ino",
+    "port": "COM11",
+    "output": "./build"
+}
