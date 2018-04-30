@@ -2,7 +2,7 @@
 #include "mHID-Project/HID-Settings.h"
 
 #include "set.h"
-#include "keymap.h"
+#include "keycode.c"
 #include "cps_keymap.h"
 
 extern const uint8_t row_pins[KEYBOARD_ROWS];
