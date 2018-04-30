@@ -2,7 +2,6 @@
 #include "mHID-Project/HID-Settings.h"
 
 #include "set.h"
-#include "keycode.h"
 #include "keymap.h"
 #include "cps_keymap.h"
 
@@ -22,7 +21,6 @@ Set blocked_press_key_set;
 
 // 函数定义
 void key_event(uint8_t row, uint8_t col, bool pressed);
-uint8_t get_keycode(uint8_t row, uint8_t col);
 void trigger_composite_key(uint8_t keycode, bool pressed);
 
 void setup()
@@ -108,21 +106,6 @@ void key_event(uint8_t row, uint8_t col, bool pressed)
   }
 }
 
-uint8_t get_keycode(uint8_t row, uint8_t col)
-{
-  return keymap[row][col];
-}
-
-uint16_t get_col_state()
-{
-  uint8_t col;
-  uint16_t _state = 0;
-  for (col = 0; col < KEYBOARD_COLS; col++)
-  {
-    _state |= ((uint16_t)digitalRead(col_pins[col])) << col;
-  }
-  return _state;
-}
 
 uint8_t debounce = 0;
 void update_curr_col_state()

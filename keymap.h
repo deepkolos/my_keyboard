@@ -3,6 +3,7 @@
 
 #include "keycode.h"
 #include "stdint.h"
+#include "Arduino.h"
 
 #define KEYMAP( \
     K00, K01, K02, K03, K04, K05, K06, K07, K08, K09, K0A, K0B, K0C, \
@@ -32,5 +33,21 @@ const uint8_t keymap[KEYBOARD_ROWS][KEYBOARD_COLS] =
         CAPS, A, S, D, F, G, H, J, K, L, SCLN, QUOT,
         LSFT, Z, X, C, V, B, N, M, COMM, DOT, SLSH,
         LCTL, LALT, DEL, LGUI, RGUI, SPC, RCTL, RSFT, BSLS);
+
+uint8_t get_keycode(uint8_t row, uint8_t col)
+{
+  return keymap[row][col];
+}
+
+uint16_t get_col_state()
+{
+  uint8_t col;
+  uint16_t _state = 0;
+  for (col = 0; col < KEYBOARD_COLS; col++)
+  {
+    _state |= ((uint16_t)digitalRead(col_pins[col])) << col;
+  }
+  return _state;
+}
 
 #endif
