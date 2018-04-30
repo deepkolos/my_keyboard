@@ -45,6 +45,11 @@ composite_key_t composite_keymap[] = {
      KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
 
+     {{KC_HOME, KC_SPC},    2,
+     {KC_LGUI, KC_R},       2,
+     KC_WASD_KEY,           KC_WASD_KEY_LEN,
+     DEFAULT_CPS_BASE},
+
      // win + n start
      {{KC_HOME, KC_1},      2,
      {KC_LGUI, KC_1},       2,
