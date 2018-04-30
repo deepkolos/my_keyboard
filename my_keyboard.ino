@@ -30,6 +30,55 @@ uint8_t key_released_num = 0;
 Set press_trigger_key_set;
 Set blocked_press_key_set;
 
+typedef struct
+{
+  uint8_t scan_keys[5];
+  uint8_t scan_key_len;
+  uint8_t trigger_keys[5];
+  uint8_t trigger_key_len;
+  uint8_t key_allow_insert[8];
+  uint8_t key_allow_insert_len;
+  uint8_t matched = 0;
+  uint8_t unmatched = 0;
+  bool has_triggered = false;
+} composite_key_t;
+
+#define COMMON_INSERT_KEY_LEN 8
+#define COMMON_INSERT_KEY                                            \
+  {                                                                  \
+    KC_LCTRL, KC_RCTRL, KC_LSHIFT, KC_RSHIFT, KC_W, KC_A, KC_S, KC_D \
+  }
+
+#define composite_key_len 4
+composite_key_t composite_keymap[composite_key_len] = {
+    {.scan_keys = {KC_HOME, KC_W},
+     .scan_key_len = 2,
+     .trigger_keys = {KC_UP},
+     .trigger_key_len = 1,
+     .key_allow_insert = COMMON_INSERT_KEY,
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+
+    {.scan_keys = {KC_HOME, KC_A},
+     .scan_key_len = 2,
+     .trigger_keys = {KC_LEFT},
+     .trigger_key_len = 1,
+     .key_allow_insert = COMMON_INSERT_KEY,
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+
+    {.scan_keys = {KC_HOME, KC_S},
+     .scan_key_len = 2,
+     .trigger_keys = {KC_DOWN},
+     .trigger_key_len = 1,
+     .key_allow_insert = COMMON_INSERT_KEY,
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+
+    {.scan_keys = {KC_HOME, KC_D},
+     .scan_key_len = 2,
+     .trigger_keys = {KC_RIGHT},
+     .trigger_key_len = 1,
+     .key_allow_insert = COMMON_INSERT_KEY,
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN}};
+
 // 函数定义
 void key_event(uint8_t row, uint8_t col, bool pressed);
 uint8_t get_keycode(uint8_t row, uint8_t col);
@@ -229,54 +278,14 @@ void send_key(uint8_t keycode, bool pressed)
   }
 }
 
-typedef struct
+bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
 {
-  uint8_t scan_keys[5];
-  uint8_t scan_key_len;
-  uint8_t trigger_keys[5];
-  uint8_t trigger_key_len;
-  uint8_t key_allow_insert[8];
-  uint8_t key_allow_insert_len;
-  uint8_t matched = 0;
-  uint8_t unmatched = 0;
-  bool has_triggered = false;
-} composite_key_t;
-
-#define COMMON_INSERT_KEY_LEN 8
-#define COMMON_INSERT_KEY                                            \
-  {                                                                  \
-    KC_LCTRL, KC_RCTRL, KC_LSHIFT, KC_RSHIFT, KC_W, KC_A, KC_S, KC_D \
-  }
-
-#define composite_key_len 4
-composite_key_t composite_keymap[composite_key_len] = {
-    {.scan_keys = {KC_HOME, KC_W},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_UP},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
-
-    {.scan_keys = {KC_HOME, KC_A},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_LEFT},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
-
-    {.scan_keys = {KC_HOME, KC_S},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_DOWN},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
-
-    {.scan_keys = {KC_HOME, KC_D},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_RIGHT},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN}};
+  uint8_t i;
+  for (i = 0; i < cps_key->key_allow_insert_len; i++)
+    if (cps_key->key_allow_insert[i] == keycode)
+      return true;
+  return false;
+}
 
 void trigger_composite_key(uint8_t keycode, bool pressed)
 {
@@ -378,13 +387,4 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
     delay(20);
     send_key(keycode, false);
   }
-}
-
-bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
-{
-  uint8_t i;
-  for (i = 0; i < cps_key->key_allow_insert_len; i++)
-    if (cps_key->key_allow_insert[i] == keycode)
-      return true;
-  return false;
 }
