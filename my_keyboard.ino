@@ -38,10 +38,14 @@ typedef struct
   uint8_t trigger_key_len;
   uint8_t key_allow_insert[8];
   uint8_t key_allow_insert_len;
-  uint8_t matched = 0;
-  uint8_t unmatched = 0;
-  bool has_triggered = false;
+  uint8_t matched;
+  uint8_t unmatched;
+  bool has_triggered;
 } composite_key_t;
+
+#define DEFAULT_CPS_BASE .matched = 0,   \
+                         .unmatched = 0, \
+                         .has_triggered = false
 
 #define COMMON_INSERT_KEY_LEN 8
 #define COMMON_INSERT_KEY                                            \
@@ -56,28 +60,32 @@ composite_key_t composite_keymap[composite_key_len] = {
      .trigger_keys = {KC_UP},
      .trigger_key_len = 1,
      .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
+     DEFAULT_CPS_BASE},
 
     {.scan_keys = {KC_HOME, KC_A},
      .scan_key_len = 2,
      .trigger_keys = {KC_LEFT},
      .trigger_key_len = 1,
      .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
+     DEFAULT_CPS_BASE},
 
     {.scan_keys = {KC_HOME, KC_S},
      .scan_key_len = 2,
      .trigger_keys = {KC_DOWN},
      .trigger_key_len = 1,
      .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN},
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
+     DEFAULT_CPS_BASE},
 
     {.scan_keys = {KC_HOME, KC_D},
      .scan_key_len = 2,
      .trigger_keys = {KC_RIGHT},
      .trigger_key_len = 1,
      .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN}};
+     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
+     DEFAULT_CPS_BASE}};
 
 // 函数定义
 void key_event(uint8_t row, uint8_t col, bool pressed);
