@@ -3,7 +3,7 @@
 
 #include "stdint.h"
 #include "keycode.h"
-#include "set.h"
+#include "set.hpp"
 #include "keyboard.hpp"
 
 typedef struct
@@ -77,6 +77,12 @@ bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
   return false;
 }
 
+void print_key (uint8_t keycode) {
+  Serial.print(" ");
+  Serial.print(keycode);
+  Serial.print(" ");
+}
+
 void trigger_composite_key(uint8_t keycode, bool pressed)
 {
   uint8_t i, j;
@@ -90,8 +96,10 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
     if (pressed)
     {
+      Serial.print("press: ");
       if (cps_key->scan_keys[cps_key->matched] == keycode)
       {
+        Serial.print("scan key");
         cps_key->matched++;
         // 阻塞该默认
         block = true;
@@ -103,14 +111,17 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
           for (j = 0; j < cps_key->trigger_key_len; j++)
             if (press_trigger_key_set.add(cps_key->trigger_keys[j]))
               send_key(cps_key->trigger_keys[j], pressed);
-
+  
           cps_key->has_triggered = true;
+          Serial.print(" and triggered");
+          press_trigger_key_set.foreach(print_key);
         }
       }
 
       // 非scan_key和insert_key
       else if (!check_in_allow_insert_key_list(cps_key, keycode))
       {
+        Serial.print("not insert key");
         cps_key->unmatched++;
         // 现在组合键处于未触发状态, 则释放被阻塞的按钮, 会重复触发, 不该在这里触发
         if (cps_key->matched != cps_key->trigger_key_len)
@@ -120,12 +131,16 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             if (blocked_press_key_set.remove(cps_key->scan_keys[i]))
               send_key(cps_key->scan_keys[i], true);
       }
+      Serial.println();
     }
     else // release
     {
       // 检测是否属于组合键的扫描键
+      Serial.print("release: ");
       if (cps_key->scan_keys[cps_key->matched - 1] == keycode)
       {
+        Serial.print("scan key");
+        
         cps_key->matched--;
         block = true;
         blocked_press_key_set.remove(keycode);
@@ -139,11 +154,19 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
           if (j >= 0 && press_trigger_key_set.remove(cps_key->trigger_keys[j]))
             send_key(cps_key->trigger_keys[j], false);
 
+          Serial.print(" and trigger key");
+          press_trigger_key_set.foreach(print_key);
+
           // 当没有键被按下的话, 把所有剩下的key都释放
-          if (cps_key->matched == 0)
+          if (cps_key->matched == 0) {
             for (j = 0; j < cps_key->trigger_key_len - cps_key->scan_key_len; j++)
               if (press_trigger_key_set.remove(cps_key->trigger_keys[j]))
                 send_key(cps_key->trigger_keys[j], false);
+
+            cps_key->has_triggered = false;
+            Serial.print(" all");
+            press_trigger_key_set.foreach(print_key);
+          }
         }
 
         // 未触发的时候释放了中间状态
@@ -156,13 +179,14 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
       else if (!check_in_allow_insert_key_list(cps_key, keycode))
       {
         cps_key->unmatched--;
-
+        Serial.print("not insert key");
         // 如果减去之后会恢复match的阻塞状态
         if (cps_key->unmatched == 0)
           for (j = 0; j < cps_key->matched; j++)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               send_key(cps_key->scan_keys[j], false);
       }
+      Serial.println();
     }
   }
 

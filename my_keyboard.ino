@@ -1,4 +1,3 @@
-#include "set.h"
 #include "keycode.c"
 #include "cps_keymap.h"
 

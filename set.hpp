@@ -78,17 +78,25 @@ public:
       }
     }
 
+    if (curr == head) {
+      delete curr;
+      head = nullptr;
+      return true;
+    }
     return false;
   }
 
   void foreach (void (*callback)(uint8_t))
   {
+    if (head == nullptr) return;
+    
     Node *curr = head;
     while (curr->next != nullptr)
     {
       (*callback)(curr->data);
       curr = curr->next;
     }
+    (*callback)(curr->data);
   }
 
   void empty()
