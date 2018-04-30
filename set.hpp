@@ -118,6 +118,7 @@ public:
       delete before;
     }
     delete curr;
+    head = nullptr;
   }
 };
 #endif

@@ -113,4 +113,12 @@ void send_key(uint8_t keycode, bool pressed)
     break;
   }
 }
+
+void press_key (uint8_t keycode) {
+  send_key(keycode, true);
+};
+
+void release_key (uint8_t keycode) {
+  send_key(keycode, false);
+}
 #endif

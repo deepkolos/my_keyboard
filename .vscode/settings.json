@@ -20,6 +20,7 @@
         "stdint.h": "c",
         "keymap.c": "cpp",
         "keycode.c": "cpp",
-        "keyboard.c": "cpp"
+        "keyboard.c": "cpp",
+        "cps_keymap.c": "cpp"
     }
 }
