@@ -176,7 +176,7 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
         // 未触发的时候释放了中间状态
         // 仅仅触发了一个的时候
-        else if (key_pressed_num == 1 && cps_key->scan_keys[0] == keycode)
+        else if (key_pressed_num == 1 && cps_key->scan_keys[0] == keycode && cps_key->mode != 1)
           is_short_recover_key = true;
       }
 
