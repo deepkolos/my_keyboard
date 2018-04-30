@@ -1,7 +1,7 @@
 #ifndef CPS_KEYMAP
 #define CPS_KEYMAP
 
-const int composite_key_len = 14;
+int composite_key_len;
 
 #include "cps_key.h"
 
@@ -32,8 +32,8 @@ composite_key_t composite_keymap[] = {
      // home + wasd end
      
      // shift + bs -> enter
-     {{KC_LSFT, KC_TAB},    2,
-     {KC_RIGHT},            1,
+     {{KC_CAPS, KC_TAB},    2,
+     {KC_ENT},              1,
      {},                    0,
      DEFAULT_CPS_BASE},
      
@@ -87,8 +87,18 @@ composite_key_t composite_keymap[] = {
      {{KC_HOME, KC_9},      2,
      {KC_LGUI, KC_9},       2,
      KC_0_TO_9_SET,         KC_0_TO_9_SET_LEN,
-     DEFAULT_CPS_BASE}
+     DEFAULT_CPS_BASE},
      // win + n end
+
+     // home + esc -> alt + f4
+     {{KC_HOME, KC_ESC},    2,
+     {KC_LALT, KC_F4},      2,
+     {},                    0,
+     DEFAULT_CPS_BASE}
 };
+
+void init_cps_key () {
+  composite_key_len = sizeof(composite_keymap)/sizeof(composite_key_t);
+}
 
 #endif

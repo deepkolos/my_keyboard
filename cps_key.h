@@ -29,7 +29,7 @@ typedef struct
     KC_LCTRL, KC_LSHIFT, KC_W, KC_A, KC_S, KC_D, KC_R \
   }
 
-extern const int composite_key_len;
+extern int composite_key_len;
 extern composite_key_t composite_keymap[];
 
 extern uint8_t key_pressed_num;
@@ -51,11 +51,10 @@ bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
 int index_of(uint8_t list[], uint8_t len, uint8_t keycode)
 {
   uint8_t i;
-  for (i = 0; i < len; i++)
-  {
-    if (list[i] == keycode)
-      return i;
-  }
+  if (len != 0)
+    for (i = 0; i < len; i++)
+      if (list[i] == keycode)
+        return i;
   return -1;
 }
 
@@ -66,7 +65,8 @@ void print_key(uint8_t keycode)
   Serial.print(" ");
 }
 
-void remove_key_from_blocked_set(uint8_t keycode) {
+void remove_key_from_blocked_set(uint8_t keycode)
+{
   blocked_press_key_set.remove(keycode);
 }
 
@@ -94,6 +94,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         block = true;
         blocked_press_key_set.add(keycode);
         // 判断时候打到触发条件
+
+        Serial.print(" unmatched:");
+        Serial.print(cps_key->unmatched);
+        Serial.print(" matched:");
+        Serial.print(cps_key->matched);
         if (cps_key->matched == cps_key->scan_key_len && cps_key->unmatched == 0)
         {
           // 触发组合键, 一次性按下所有的按键
@@ -128,7 +133,9 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
       scan_key_index = index_of(cps_key->scan_keys, cps_key->scan_key_len, keycode);
       if (scan_key_index != -1)
       {
-
+        if (cps_key->scan_keys[cps_key->matched] != keycode && cps_key->unmatched != 0)
+          cps_key->unmatched--;
+          
         if (cps_key->matched != 0)
           cps_key->matched--;
 
@@ -162,22 +169,22 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
         // 未触发的时候释放了中间状态
         // 仅仅触发了一个的时候
-        else if (key_pressed_num == 1)
+        else if (key_pressed_num == 1 && cps_key->scan_keys[0] == keycode)
           is_short_recover_key = true;
       }
 
       // 非scan_key和非insert key
       else if (!check_in_allow_insert_key_list(cps_key, keycode))
       {
-        if(cps_key->unmatched != 0) cps_key->unmatched--;
-        
+        if (cps_key->unmatched != 0)
+          cps_key->unmatched--;
+
         Serial.print("not insert key");
         // 如果减去之后会恢复match的阻塞状态
-        if (cps_key->unmatched == 0)
+        if (cps_key->unmatched == 0 && cps_key->matched != 0)
           for (j = 0; j < cps_key->matched; j++)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               release_key(cps_key->scan_keys[j]);
-
       }
       Serial.println();
     }

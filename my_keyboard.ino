@@ -13,6 +13,7 @@ extern uint8_t key_released_num;
 
 void setup()
 {
+  init_cps_key();
   init_keyboard();
 
   uint8_t row, col, keycode;
