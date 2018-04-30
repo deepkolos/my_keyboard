@@ -4,21 +4,11 @@
 #include "set.h"
 #include "keycode.h"
 #include "keymap.h"
+#include "cps_keymap.h"
 
-#define KEYBOARD_ROWS 5
-#define KEYBOARD_COLS 13
-#define DEBOUNCE 5
-
-const uint8_t row_pins[KEYBOARD_ROWS] = {1, 0, 2, 3, 4};
-const uint8_t col_pins[KEYBOARD_COLS] = {};
-
-const uint8_t keymap[KEYBOARD_ROWS][KEYBOARD_COLS] =
-    KEYMAP(
-        ESC, 1, 2, 3, 4, 5, 6, 7, 8, 9, 0, MINS, EQL, GRV,
-        TAB, Q, W, E, R, T, Y, U, I, O, P, LBRC, RBRC,
-        CAPS, A, S, D, F, G, H, J, K, L, SCLN, QUOT,
-        LSFT, Z, X, C, V, B, N, M, COMM, DOT, SLSH,
-        LCTL, LALT, DEL, LGUI, RGUI, SPC, RCTL, RSFT, BSLS);
+extern const uint8_t row_pins[KEYBOARD_ROWS];
+extern const uint8_t col_pins[KEYBOARD_COLS];
+extern const uint8_t keymap[KEYBOARD_ROWS][KEYBOARD_COLS];
 
 uint16_t curr_col_state[KEYBOARD_ROWS];
 uint16_t prev_col_state[KEYBOARD_ROWS];
@@ -29,63 +19,6 @@ uint8_t key_pressed_num = 0;
 uint8_t key_released_num = 0;
 Set press_trigger_key_set;
 Set blocked_press_key_set;
-
-typedef struct
-{
-  uint8_t scan_keys[5];
-  uint8_t scan_key_len;
-  uint8_t trigger_keys[5];
-  uint8_t trigger_key_len;
-  uint8_t key_allow_insert[8];
-  uint8_t key_allow_insert_len;
-  uint8_t matched;
-  uint8_t unmatched;
-  bool has_triggered;
-} composite_key_t;
-
-#define DEFAULT_CPS_BASE .matched = 0,   \
-                         .unmatched = 0, \
-                         .has_triggered = false
-
-#define COMMON_INSERT_KEY_LEN 8
-#define COMMON_INSERT_KEY                                            \
-  {                                                                  \
-    KC_LCTRL, KC_RCTRL, KC_LSHIFT, KC_RSHIFT, KC_W, KC_A, KC_S, KC_D \
-  }
-
-#define composite_key_len 4
-composite_key_t composite_keymap[composite_key_len] = {
-    {.scan_keys = {KC_HOME, KC_W},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_UP},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
-     DEFAULT_CPS_BASE},
-
-    {.scan_keys = {KC_HOME, KC_A},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_LEFT},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
-     DEFAULT_CPS_BASE},
-
-    {.scan_keys = {KC_HOME, KC_S},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_DOWN},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
-     DEFAULT_CPS_BASE},
-
-    {.scan_keys = {KC_HOME, KC_D},
-     .scan_key_len = 2,
-     .trigger_keys = {KC_RIGHT},
-     .trigger_key_len = 1,
-     .key_allow_insert = COMMON_INSERT_KEY,
-     .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
-     DEFAULT_CPS_BASE}};
 
 // 函数定义
 void key_event(uint8_t row, uint8_t col, bool pressed);
