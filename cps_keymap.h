@@ -61,4 +61,12 @@ composite_key_t composite_keymap[composite_key_len] = {
      .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
      DEFAULT_CPS_BASE}};
 
+bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
+{
+  uint8_t i;
+  for (i = 0; i < cps_key->key_allow_insert_len; i++)
+    if (cps_key->key_allow_insert[i] == keycode)
+      return true;
+  return false;
+}
 #endif

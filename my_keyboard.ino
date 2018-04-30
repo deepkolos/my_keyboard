@@ -1,4 +1,5 @@
 #include "set.h"
+#include "keycode.c"
 #include "keyboard.hpp"
 #include "cps_keymap.h"
 
@@ -101,16 +102,6 @@ void key_event(uint8_t row, uint8_t col, bool pressed)
   {
     key_pressed_num = key_released_num = 0;
   }
-}
-
-
-bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
-{
-  uint8_t i;
-  for (i = 0; i < cps_key->key_allow_insert_len; i++)
-    if (cps_key->key_allow_insert[i] == keycode)
-      return true;
-  return false;
 }
 
 void trigger_composite_key(uint8_t keycode, bool pressed)
