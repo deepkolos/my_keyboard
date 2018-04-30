@@ -23,5 +23,4 @@ uint16_t get_col_state()
   return _state;
 }
 
-
 #endif
