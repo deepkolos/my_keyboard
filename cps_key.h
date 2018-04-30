@@ -7,13 +7,13 @@
 #include "keyboard.hpp"
 
 typedef struct
-{
-  uint8_t scan_keys[5];
-  uint8_t scan_key_len;
-  uint8_t trigger_keys[5];
-  uint8_t trigger_key_len;
-  uint8_t key_allow_insert[10];
-  uint8_t key_allow_insert_len;
+{ //希望const会优化一下空间占用
+  const uint8_t scan_keys[5];
+  const uint8_t scan_key_len;
+  const uint8_t trigger_keys[5];
+  const uint8_t trigger_key_len;
+  const uint8_t key_allow_insert[12];
+  const uint8_t key_allow_insert_len;
   uint8_t matched;
   uint8_t unmatched;
   bool has_triggered;
@@ -22,12 +22,6 @@ typedef struct
 #define DEFAULT_CPS_BASE .matched = 0,   \
                          .unmatched = 0, \
                          .has_triggered = false
-
-#define COMMON_INSERT_KEY_LEN 7
-#define COMMON_INSERT_KEY                             \
-  {                                                   \
-    KC_LCTRL, KC_LSHIFT, KC_W, KC_A, KC_S, KC_D, KC_R \
-  }
 
 extern int composite_key_len;
 extern composite_key_t composite_keymap[];
@@ -91,8 +85,10 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         Serial.print("scan key");
         cps_key->matched++;
         // 阻塞该默认
-        block = true;
-        blocked_press_key_set.add(keycode);
+        if (!(cps_key->matched == 1 && cps_key->unmatched != 0)) {
+          block = true;
+          blocked_press_key_set.add(keycode);
+        }
         // 判断时候打到触发条件
 
         Serial.print(" unmatched:");
@@ -135,7 +131,7 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
       {
         if (cps_key->scan_keys[cps_key->matched] != keycode && cps_key->unmatched != 0)
           cps_key->unmatched--;
-          
+
         if (cps_key->matched != 0)
           cps_key->matched--;
 
