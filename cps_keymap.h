@@ -63,17 +63,7 @@ composite_key_t composite_keymap[composite_key_len] = {
      .key_allow_insert_len = COMMON_INSERT_KEY_LEN,
      DEFAULT_CPS_BASE}};
 
-extern const uint8_t row_pins[KEYBOARD_ROWS];
-extern const uint8_t col_pins[KEYBOARD_COLS];
-extern const uint8_t keymap[KEYBOARD_ROWS][KEYBOARD_COLS];
-
-extern uint16_t curr_col_state[KEYBOARD_ROWS];
-extern uint16_t prev_col_state[KEYBOARD_ROWS];
-extern uint16_t temp_col_state[KEYBOARD_ROWS];
-extern uint8_t key_press_stack[KEYBOARD_COLS * KEYBOARD_ROWS];
-extern uint8_t key_release_stack[KEYBOARD_COLS * KEYBOARD_ROWS];
 extern uint8_t key_pressed_num;
-extern uint8_t key_released_num;
 
 Set press_trigger_key_set;
 Set blocked_press_key_set;
