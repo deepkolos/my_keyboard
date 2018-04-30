@@ -28,6 +28,7 @@ typedef struct
 extern int composite_key_len;
 extern composite_key_t composite_keymap[];
 
+extern uint8_t key_press_stack[];
 extern uint8_t key_pressed_num;
 
 Set press_trigger_key_set;
@@ -176,8 +177,17 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
         // 未触发的时候释放了中间状态
         // 仅仅触发了一个的时候
-        else if (key_pressed_num == 1 && cps_key->scan_keys[0] == keycode && cps_key->mode != 1)
-          is_short_recover_key = true;
+        else if (
+          (
+            key_pressed_num == 1 && 
+            cps_key->scan_keys[0] == keycode && 
+            cps_key->mode != 1
+          ) || (
+            // 这就是定制了, 非配置
+            (keycode == KC_HOME || keycode == KC_END) &&
+            key_press_stack[0] == KC_LSFT
+          )
+        ) is_short_recover_key = true;
       }
 
       // 非scan_key和非insert key
