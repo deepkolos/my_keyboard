@@ -30,18 +30,33 @@ Home  + X    -> 增加亮度
 Home  + C    -> 减少音量
 Home  + V    -> 增大音量
 End   + M    -> 静音
+
+一些简单转义
+aand         -> &&
+Home  + j    -> ->
+Home  + k    -> () => {}
+yx           -> 我的邮箱
+uqq          -> 我的QQ账户
+sgg          -> 快速谷歌搜索
+sdb          -> 快速百度搜索
+stb          -> 快速淘宝搜索
+
+常用路径等等
+gitdir       -> D:\DEV\Github
+startupdir   -> C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
 ```
 还有一些第二版时候有的组合键, 但是很少用, 所以没加上去, 比如快速把窗口切换到另一个屏幕, 最大化窗口, 鼠标控制等
 
 ### 键盘
-
+键帽还没贴贴纸, 所以>...
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/keyboard.jpg" width="300"/>
 
 ### PCB
+下单5张, 发了6张, 多送了一张, 感谢老板~
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/pcb.jpg"/>
 
 ### 主控 Pro Micro
-
+我的是蓝色的
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/pro micro.png"/>
 
 ### 组合键触发规则
