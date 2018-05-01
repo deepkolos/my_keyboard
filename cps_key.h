@@ -12,7 +12,7 @@ typedef struct
   const uint8_t scan_key_len;
   const uint8_t trigger_keys[5];
   const uint8_t trigger_key_len;
-  const uint8_t key_allow_insert[16];
+  const uint8_t key_allow_insert[17];
   const uint8_t key_allow_insert_len;
   bool mode;
   uint8_t matched;
