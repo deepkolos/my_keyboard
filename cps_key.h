@@ -128,6 +128,9 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             // 把已经match, 那些被阻塞的, 取消阻塞
             recover_key_set.add(cps_key->scan_keys[j]);
             Serial.print(" add to recover set");
+            if (cps_key->scan_keys[j] == KC_CAPS) {
+              Serial.print(" error -----------------------------");
+            }
           }
       }
       Serial.println();
@@ -150,8 +153,10 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         {
           // 慢释放
           Serial.print("scan key");
-          block = true;
-          blocked_press_key_set.remove(keycode);
+          if (!(cps_key->mode == 1 && keycode == cps_key->scan_keys[0])) {
+            block = true;
+            blocked_press_key_set.remove(keycode);
+          }
 
           Serial.print(" and trigger key");
 
@@ -203,10 +208,12 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               release_key(cps_key->scan_keys[j]);
       }
-      Serial.println();
+      Serial.println();;
     }
   }
 
+  Serial.println("---------------------------------");
+  
   if (!block)
   {
     send_key(keycode, pressed);

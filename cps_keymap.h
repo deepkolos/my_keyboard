@@ -36,7 +36,9 @@ composite_key_t composite_keymap[] = {
      // shift + bs -> enter
      {{KC_CAPS, KC_TAB},    2,
      {KC_ENT},              1,
-     {KC_CAPS},             1,
+    { KC_LSFT, KC_CAPS, 
+      KC_W, KC_A, KC_S, 
+      KC_D, KC_HOME},       7,
      true, 0, 0, false},
      
      // home + r -> win + r
@@ -45,6 +47,7 @@ composite_key_t composite_keymap[] = {
      KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
 
+     // home + spc -> win + r
      {{KC_HOME, KC_SPC},    2,
      {KC_LGUI, KC_R},       2,
      KC_WASD_KEY,           KC_WASD_KEY_LEN,
