@@ -8,8 +8,8 @@ int composite_key_len;
 // 考虑使用位表来减少空间占用
 #define KC_0_9_WASD_SET_LEN 17
 #define KC_0_9_WASD_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_CAPS, KC_LSFT, KC_LALT, KC_W, KC_A, KC_S, KC_D}
-#define KC_0_TO_9_SET_LEN 10
-#define KC_0_TO_9_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0}
+#define KC_0_TO_9_SET_LEN 12
+#define KC_0_TO_9_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL}
 #define KC_WASD_KEY_LEN 10
 #define KC_WASD_KEY {KC_LSFT, KC_CAPS, KC_LALT ,KC_W, KC_A, KC_S, KC_D, KC_R, KC_E, KC_T}
 

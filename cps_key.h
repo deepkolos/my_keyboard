@@ -35,6 +35,15 @@ Set press_trigger_key_set;
 Set blocked_press_key_set;
 Set recover_key_set;
 
+#ifdef _DEBUG_
+void print_key(uint8_t keycode)
+{
+  Serial.print(" ");
+  Serial.print(keycode);
+  Serial.print(" ");
+}
+#endif
+
 bool check_in_allow_insert_key_list(composite_key_t *cps_key, uint8_t keycode)
 {
   uint8_t i;
@@ -53,13 +62,6 @@ int index_of(const uint8_t list[], uint8_t len, uint8_t keycode)
       if (list[i] == keycode)
         return i;
   return -1;
-}
-
-void print_key(uint8_t keycode)
-{
-  Serial.print(" ");
-  Serial.print(keycode);
-  Serial.print(" ");
 }
 
 void remove_key_from_blocked_set(uint8_t keycode)
@@ -82,10 +84,15 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
     if (pressed)
     {
+      #ifdef _DEBUG_
       Serial.print("press: ");
+      #endif
       if (cps_key->scan_keys[cps_key->matched] == keycode)
       {
+        #ifdef _DEBUG_
         Serial.print("scan key");
+        #endif
+        
         cps_key->matched++;
         // 阻塞该默认
         if (cps_key->matched == 1 && cps_key->mode == 1 && cps_key->unmatched == 0) {
@@ -97,17 +104,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
           blocked_press_key_set.add(keycode);
         }
         // 判断时候打到触发条件
-
-        Serial.print(" unmatched:");
-        Serial.print(cps_key->unmatched);
-        Serial.print(" matched:");
-        Serial.print(cps_key->matched);
         if (cps_key->matched == cps_key->scan_key_len && cps_key->unmatched == 0)
         {
           // 继续打补丁
-          if (cps_key->mode == 1) {
+          if (cps_key->mode == 1)
             release_key(cps_key->scan_keys[0]);
-          }
 
           // 触发组合键, 一次性按下所有的按键
           for (j = 0; j < cps_key->trigger_key_len; j++)
@@ -116,19 +117,29 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
           if (cps_key->mode == 1) {
             press_key(cps_key->scan_keys[0]);
+            if (key_pressed_num <= cps_key->scan_key_len) {
+              release_key(cps_key->scan_keys[0]);
+              press_key(cps_key->scan_keys[0]);
+            }
           }
           
           cps_key->has_triggered = true;
           has_trigger = true;
+          
+          #ifdef _DEBUG_
           Serial.print(" and triggered");
           press_trigger_key_set.foreach (print_key);
+          #endif
         }
       }
 
       // 非scan_key和insert_key
       else if (!check_in_allow_insert_key_list(cps_key, keycode))
       {
+        #ifdef _DEBUG_
         Serial.print("not insert key");
+        #endif
+        
         cps_key->unmatched++;
         // 现在组合键处于未触发状态, 则释放被阻塞的按钮, 会重复触发, 不该在这里触发
         if (cps_key->matched < cps_key->scan_key_len && cps_key->matched > 0)
@@ -136,18 +147,24 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
           {
             // 把已经match, 那些被阻塞的, 取消阻塞
             recover_key_set.add(cps_key->scan_keys[j]);
+
+            #ifdef _DEBUG_
             Serial.print(" add to recover set");
-            if (cps_key->scan_keys[j] == KC_CAPS) {
+            if (cps_key->scan_keys[j] == KC_CAPS)
               Serial.print(" error -----------------------------");
-            }
+            #endif
           }
       }
+      #ifdef _DEBUG_
       Serial.println();
+      #endif
     }
     else // release
     {
       // 检测是否属于组合键的扫描键
+      #ifdef _DEBUG_
       Serial.print("release: ");
+      #endif
       scan_key_index = index_of(cps_key->scan_keys, cps_key->scan_key_len, keycode);
       if (scan_key_index != -1)
       {
@@ -157,18 +174,23 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         if (cps_key->matched != 0)
           cps_key->matched--;
 
+        #ifdef _DEBUG_
+        Serial.print("scan key");
+        #endif
+
         // 当已经触发过的时候
         if (cps_key->has_triggered)
         {
-          // 慢释放
-          Serial.print("scan key");
           if (!(cps_key->mode == 1 && keycode == cps_key->scan_keys[0])) {
             block = true;
             blocked_press_key_set.remove(keycode);
           }
 
+          #ifdef _DEBUG_
           Serial.print(" and trigger key");
+          #endif
 
+          // 慢释放
           j = scan_key_index > cps_key->trigger_key_len - 1
                   ? cps_key->trigger_key_len - 1
                   : scan_key_index;
@@ -177,10 +199,6 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             if (press_trigger_key_set.remove(cps_key->trigger_keys[j]))
               send_key(cps_key->trigger_keys[j], false);
 
-          // if (scan_key_index == cps_key->scan_key_len-1 && cps_key->mode == 1) {
-          //   press_key(cps_key->scan_keys[0]);
-          // }
-
           if (cps_key->matched == 0)
           {
             cps_key->has_triggered = false;
@@ -188,8 +206,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             recover_key_set.empty();
             if (cps_key->mode == 1)
               block = false;
+            
+            #ifdef _DEBUG_
             Serial.print(" all");
             press_trigger_key_set.foreach (print_key);
+            #endif
           }
         }
 
@@ -206,7 +227,9 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
                 key_press_stack[0] == KC_LSFT))
         {
           is_short_recover_key = true;
+          #ifdef _DEBUG_
           Serial.print(" short recover");
+          #endif
         }
       }
 
@@ -216,18 +239,24 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         if (cps_key->unmatched != 0)
           cps_key->unmatched--;
 
+        #ifdef _DEBUG_
         Serial.print("not insert key");
+        #endif
         // 如果减去之后会恢复match的阻塞状态
         if (cps_key->unmatched == 0 && cps_key->matched != 0 && cps_key->mode != 1)
           for (j = 0; j < cps_key->matched; j++)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               release_key(cps_key->scan_keys[j]);
       }
+      #ifdef _DEBUG_
       Serial.println();
+      #endif
     }
   }
 
+  #ifdef _DEBUG_
   Serial.println("---------------------------------");
+  #endif
 
   if (!block)
   {

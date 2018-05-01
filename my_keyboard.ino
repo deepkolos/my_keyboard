@@ -1,3 +1,5 @@
+// #define _DEBUG_
+
 #include "keycode.c"
 #include "cps_keymap.h"
 
