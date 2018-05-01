@@ -8,6 +8,7 @@
 
 ### 键盘布局
 注: 为了笔记本的键盘的按键也类似, 所以左边部分修饰键通过keymap软件修改而得
+
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/layout.png"/>
 
 ### 组合键配置
@@ -33,8 +34,8 @@ End   + M    -> 静音
 
 一些简单转义
 aand         -> &&
-Home  + j    -> ->
-Home  + k    -> () => {}
+End   + j    -> ->
+End   + k    -> () => {}
 yx           -> 我的邮箱
 uqq          -> 我的QQ账户
 sgg          -> 快速谷歌搜索
@@ -49,14 +50,17 @@ startupdir   -> C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
 
 ### 键盘
 键帽还没贴贴纸, 所以>...
+
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/keyboard.jpg" width="300"/>
 
 ### PCB
 下单5张, 发了6张, 多送了一张, 感谢老板~
+
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/pcb.jpg"/>
 
 ### 主控 Pro Micro
 我的是蓝色的
+
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/pro micro.png"/>
 
 ### 组合键触发规则
