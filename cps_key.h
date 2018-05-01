@@ -104,11 +104,20 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         Serial.print(cps_key->matched);
         if (cps_key->matched == cps_key->scan_key_len && cps_key->unmatched == 0)
         {
+          // 继续打补丁
+          if (cps_key->mode == 1) {
+            release_key(cps_key->scan_keys[0]);
+          }
+
           // 触发组合键, 一次性按下所有的按键
           for (j = 0; j < cps_key->trigger_key_len; j++)
             if (press_trigger_key_set.add(cps_key->trigger_keys[j]))
               send_key(cps_key->trigger_keys[j], pressed);
 
+          if (cps_key->mode == 1) {
+            press_key(cps_key->scan_keys[0]);
+          }
+          
           cps_key->has_triggered = true;
           has_trigger = true;
           Serial.print(" and triggered");
@@ -167,6 +176,10 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
           for (; j < cps_key->trigger_key_len; j++)
             if (press_trigger_key_set.remove(cps_key->trigger_keys[j]))
               send_key(cps_key->trigger_keys[j], false);
+
+          // if (scan_key_index == cps_key->scan_key_len-1 && cps_key->mode == 1) {
+          //   press_key(cps_key->scan_keys[0]);
+          // }
 
           if (cps_key->matched == 0)
           {
