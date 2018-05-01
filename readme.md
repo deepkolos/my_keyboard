@@ -7,7 +7,7 @@
 2. 第一次自己设计PCB~
 
 ### 键盘布局
-
+注: 为了笔记本的键盘的按键也类似, 所以左边部分修饰键通过keymap软件修改而得
 <img src="https://raw.githubusercontent.com/deepkolos/my_keyboard/master/asset/layout.png"/>
 
 ### 组合键配置
