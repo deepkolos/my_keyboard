@@ -183,16 +183,18 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         // 未触发的时候释放了中间状态
         // 仅仅触发了一个的时候
         else if (
-          (
-            key_pressed_num == 1 && 
-            cps_key->scan_keys[0] == keycode && 
-            cps_key->mode != 1
-          ) || (
-            // 这就是定制了, 非配置
-            (keycode == KC_HOME || keycode == KC_END) &&
-            key_press_stack[0] == KC_LSFT
-          )
-        ) is_short_recover_key = true;
+            (
+                key_pressed_num == 1 &&
+                cps_key->scan_keys[0] == keycode &&
+                cps_key->mode != 1) ||
+            (
+                // 这就是定制了, 非配置
+                (keycode == KC_HOME || keycode == KC_END) &&
+                key_press_stack[0] == KC_LSFT))
+        {
+          is_short_recover_key = true;
+          Serial.print(" short recover");
+        }
       }
 
       // 非scan_key和非insert key
@@ -208,12 +210,12 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             if (blocked_press_key_set.add(cps_key->scan_keys[j]))
               release_key(cps_key->scan_keys[j]);
       }
-      Serial.println();;
+      Serial.println();
     }
   }
 
   Serial.println("---------------------------------");
-  
+
   if (!block)
   {
     send_key(keycode, pressed);
