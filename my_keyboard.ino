@@ -8,10 +8,11 @@ extern const uint8_t col_pins[KEYBOARD_COLS];
 extern uint16_t curr_col_state[KEYBOARD_ROWS];
 extern uint16_t prev_col_state[KEYBOARD_ROWS];
 extern uint16_t temp_col_state[KEYBOARD_ROWS];
-extern uint8_t key_press_stack[KEYBOARD_COLS * KEYBOARD_ROWS];
-extern uint8_t key_release_stack[KEYBOARD_COLS * KEYBOARD_ROWS];
 extern uint8_t key_pressed_num;
 extern uint8_t key_released_num;
+
+extern Stack key_press_stack;
+extern Stack key_release_stack;
 
 void setup()
 {
@@ -81,12 +82,12 @@ void key_event(uint8_t row, uint8_t col, bool pressed)
   uint8_t keycode = get_keycode(row, col);
   if (pressed)
   {
-    key_press_stack[key_pressed_num] = keycode;
+    key_press_stack.push(keycode);
     key_pressed_num++;
   }
   else
   {
-    key_release_stack[key_released_num] = keycode;
+    key_release_stack.push(keycode);
     key_released_num++;
   }
 
@@ -96,5 +97,7 @@ void key_event(uint8_t row, uint8_t col, bool pressed)
   if (key_pressed_num == key_released_num)
   {
     key_pressed_num = key_released_num = 0;
+    key_press_stack.empty();
+    key_release_stack.empty();
   }
 }

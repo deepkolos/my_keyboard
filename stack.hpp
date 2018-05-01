@@ -33,6 +33,13 @@ class Stack
     if (head == nullptr)
       return false;
 
+    if (head == tail) {
+      (*val) = tail->data;
+      delete tail;
+      head = tail = nullptr;
+      return true;
+    }
+
     Node* curr = head;
 
     while (curr->next != tail)
@@ -41,6 +48,7 @@ class Stack
     (*val) = tail->data;
     delete tail;
     tail = curr;
+    curr->next = nullptr;
     return true;
   }
 
@@ -85,6 +93,26 @@ class Stack
     }
     delete curr;
     head = nullptr;
+  }
+
+  bool item (uint8_t index, uint8_t* val) {
+    Node* curr = head;
+
+    if (index < 0) return false;
+
+    while (index != 0) {
+      index--;
+      if (curr != nullptr)
+        curr = curr->next;
+      else
+        return false;
+    }
+
+    if (curr != nullptr){
+      (*val) = curr->data;
+      return true;
+    }
+    return false;
   }
 };
 

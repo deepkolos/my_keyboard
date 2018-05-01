@@ -1,6 +1,7 @@
 #ifndef KEYBOARD_HPP
 #define KEYBOARD_HPP
 
+#include "stack.hpp"
 #include "keymap.h"
 #include "keycode.c"
 #include "mHID-Project/HID-Project.h"
@@ -9,10 +10,10 @@
 uint16_t curr_col_state[KEYBOARD_ROWS];
 uint16_t prev_col_state[KEYBOARD_ROWS];
 uint16_t temp_col_state[KEYBOARD_ROWS];
-uint8_t key_press_stack[KEYBOARD_COLS * KEYBOARD_ROWS] = {};
-uint8_t key_release_stack[KEYBOARD_COLS * KEYBOARD_ROWS] = {};
 uint8_t key_pressed_num = 0;
 uint8_t key_released_num = 0;
+Stack key_press_stack;
+Stack key_release_stack;
 
 void init_keyboard () {
     Consumer.begin();

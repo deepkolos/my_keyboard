@@ -28,7 +28,7 @@ typedef struct
 extern int composite_key_len;
 extern composite_key_t composite_keymap[];
 
-extern uint8_t key_press_stack[];
+extern Stack key_press_stack;
 extern uint8_t key_pressed_num;
 
 Set press_trigger_key_set;
@@ -178,6 +178,8 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
         Serial.print("scan key");
         #endif
 
+        uint8_t first_key_press;
+        key_press_stack.item(0, &first_key_press);
         // 当已经触发过的时候
         if (cps_key->has_triggered)
         {
@@ -224,7 +226,7 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
             (
                 // 这就是定制了, 非配置
                 (keycode == KC_HOME || keycode == KC_END) &&
-                key_press_stack[0] == KC_LSFT))
+                first_key_press == KC_LSFT))
         {
           is_short_recover_key = true;
           #ifdef _DEBUG_
