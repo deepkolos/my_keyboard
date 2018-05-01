@@ -180,6 +180,11 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
 
         uint8_t first_key_press;
         key_press_stack.item(0, &first_key_press);
+
+        #ifdef _DEBUG_
+        Serial.print(" key_press_stack: ");
+        key_press_stack.foreach(print_key);
+        #endif
         // 当已经触发过的时候
         if (cps_key->has_triggered)
         {
@@ -260,6 +265,18 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
   Serial.println("---------------------------------");
   #endif
 
+  if (!has_trigger && pressed)
+  {
+    #ifdef _DEBUG_
+    Serial.print("recover press: ");
+    recover_key_set.foreach(print_key);
+    Serial.println();
+    #endif
+    recover_key_set.foreach (press_key);
+    recover_key_set.foreach (remove_key_from_blocked_set);
+    recover_key_set.empty();
+  }
+
   if (!block)
   {
     send_key(keycode, pressed);
@@ -270,13 +287,6 @@ void trigger_composite_key(uint8_t keycode, bool pressed)
     send_key(keycode, true);
     delay(20);
     send_key(keycode, false);
-  }
-
-  if (!has_trigger && pressed)
-  {
-    recover_key_set.foreach (press_key);
-    recover_key_set.foreach (remove_key_from_blocked_set);
-    recover_key_set.empty();
   }
 }
 

@@ -10,8 +10,8 @@ int composite_key_len;
 #define KC_0_9_WASD_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_CAPS, KC_LSFT, KC_LALT, KC_W, KC_A, KC_S, KC_D}
 #define KC_0_TO_9_SET_LEN 12
 #define KC_0_TO_9_SET {KC_1, KC_2, KC_3, KC_4, KC_5, KC_6, KC_7, KC_8, KC_9, KC_0, KC_MINS, KC_EQL}
-#define KC_WASD_KEY_LEN 10
-#define KC_WASD_KEY {KC_LSFT, KC_CAPS, KC_LALT ,KC_W, KC_A, KC_S, KC_D, KC_R, KC_E, KC_T}
+#define KC_WASD_KEY_LEN 12
+#define KC_WASD_KEY {KC_LSFT, KC_CAPS, KC_LALT ,KC_W, KC_A, KC_S, KC_D, KC_R, KC_E, KC_T, KC_C, KC_V}
 
 composite_key_t composite_keymap[] = {
     // home + wasd start
@@ -68,6 +68,29 @@ composite_key_t composite_keymap[] = {
       KC_ESC},              3,
      KC_WASD_KEY,           KC_WASD_KEY_LEN,
      DEFAULT_CPS_BASE},
+     
+     // end + j -> -> 改为ahk实现好些感觉
+    //  {{KC_END, KC_J},       2,
+    //  {KC_MINS, KC_CAPS, 
+    //   KC_DOT},             3,
+    //  {},                    0,
+    //  DEFAULT_CPS_BASE},
+     
+     // 音量调节, 无效, 暂时未知原因, 记得之前是可以的, 测试4*4键盘的时候
+    //  {{KC_HOME, KC_C},      2,
+    //  {KC_MEDIA_PLAY_PAUSE}, 1,
+    //  KC_WASD_KEY,           KC_WASD_KEY_LEN,
+    //  DEFAULT_CPS_BASE},
+
+    //  {{KC_HOME, KC_V},      2,
+    //  {KC_MEDIA_NEXT_TRACK}, 1,
+    //  KC_WASD_KEY,           KC_WASD_KEY_LEN,
+    //  DEFAULT_CPS_BASE},
+
+    //  {{KC_END, KC_M},       2,
+    //  {KC_AUDIO_MUTE},       1,
+    //  {},                    0,
+    //  DEFAULT_CPS_BASE},
 
      // win + n start
      {{KC_HOME, KC_1},      2,

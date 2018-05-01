@@ -33,6 +33,8 @@ public:
           return false;
         curr = curr->next;
       }
+      if (curr->data == data)
+          return false;
       curr->next = new Node(data);
     }
 
